@@ -18,7 +18,6 @@ import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
 
-import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.advisory.DestinationSource;
 import org.apache.activemq.command.ActiveMQTopic;
@@ -26,15 +25,15 @@ import org.apache.activemq.command.ActiveMQTopic;
 public class AdCliente implements MessageListener{
 
 	private boolean transacted = false;
-	private String url = /*"tcp://192.168.104.131:61616";*/ ActiveMQConnection.DEFAULT_BROKER_URL;
+	private String url;//"tcp://192.168.104.131:61616";*/ ActiveMQConnection.DEFAULT_BROKER_URL;
 	private TopicConnectionFactory connectionFactory;
 	private String cedula;
 	private int ackMode = Session.AUTO_ACKNOWLEDGE;//Session.CLIENT_ACKNOWLEDGE;
 
-	public AdCliente(String cedula) throws JMSException {
-
-		connectionFactory= new ActiveMQConnectionFactory(url);
+	public AdCliente(String cedula,String url) throws JMSException {
 		setCedula(cedula);
+		setUrl(url);
+		connectionFactory= new ActiveMQConnectionFactory(getUrl());
 	}
 	
 	@Override
@@ -152,5 +151,13 @@ public class AdCliente implements MessageListener{
 	
 	public void setCedula(String cedula){
 		this.cedula = cedula;
+	}
+	
+	public String getUrl(){
+		return this.url;
+	}
+	
+	public void setUrl(String url){
+		this.url = url;
 	}
 }

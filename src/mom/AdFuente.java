@@ -11,20 +11,24 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
 
-import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.advisory.DestinationSource;
 import org.apache.activemq.command.ActiveMQTopic;
 
 public class AdFuente{
 
-	private String url = ActiveMQConnection.DEFAULT_BROKER_URL;
+	private String url;
 	private final int MILAMIN = 60*1000;
-	private ConnectionFactory cf = new ActiveMQConnectionFactory(url);
+	private ConnectionFactory cf = null;
 	private int ackMode = Session.CLIENT_ACKNOWLEDGE;
 	private boolean transacted = false;
 	private Session sesion = null;
 	
+	public AdFuente(String url) throws JMSException{
+		setUrl(url);
+		cf = new ActiveMQConnectionFactory(getUrl());
+	}
+
 	public void crearTopico(String nombreTopico) throws JMSException{
 
 		Connection conexion = cf.createConnection();
@@ -107,5 +111,13 @@ public class AdFuente{
 			System.out.println(topico.toString());
 		}
 		conexion.close();
+	}
+	
+	private void setUrl(String url) {
+		this.url = url;
+	}
+	
+	private String getUrl(){
+		return this.url;
 	}
 }

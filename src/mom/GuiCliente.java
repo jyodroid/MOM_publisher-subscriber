@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import javax.jms.JMSException;
+
+import org.apache.activemq.ActiveMQConnection;
+
 import mom.AdCliente;
 
 public class GuiCliente {
@@ -14,11 +18,27 @@ public class GuiCliente {
 	public static void main(String[] args) {
 
 		int opcion = 0;
-		System.out.println("Ingrese su número de cédula");
 		String cedula;
+		String url;
+		
+		if(args.length==0){
+			url = ActiveMQConnection.DEFAULT_BROKER_URL;
+		}else{
+			url = args[0];
+		}
 		try {
+			System.out.println("Ingrese su número de cédula");
 			cedula = br.readLine();
-			ac = new AdCliente(cedula);
+			ac = new AdCliente(cedula,url);
+		} catch (JMSException e) {
+			System.out.println("Error de conexión: "+e.getMessage());
+		} catch (IOException e) {
+			System.out.println("Error al ingresar cédula: "+e.getMessage());
+		}
+		
+		try {
+			
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

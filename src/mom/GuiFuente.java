@@ -6,14 +6,27 @@ import java.io.InputStreamReader;
 
 import javax.jms.JMSException;
 
+import org.apache.activemq.ActiveMQConnection;
+
 
 public class GuiFuente {
 
-	private AdFuente af = new AdFuente();
+	private static AdFuente af = null;
 	private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 	public static void main(String[] args) {
 
+		String url;
+		if(args.length==0){
+			url = ActiveMQConnection.DEFAULT_BROKER_URL;
+		}else{
+			url = args[0];
+		}
+		try {
+			af = new AdFuente(url);
+		} catch (JMSException e) {	
+			System.out.println("Error de jms :"+e.getMessage());
+		}
 		int opcion = 0;
 		GuiFuente guif = new GuiFuente();
 		do{
